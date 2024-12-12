@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Comet Trail Background</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: #000; /* Black background */
+    }
+    canvas {
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+  </style>
+</head>
+<body>
+  <canvas></canvas>
+  <script>
+    const canvas = document.querySelector('canvas');
+    const ctx = canvas.getContext('2d');
+
+    // Resize canvas to fit window
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    // Store the comet trail
+    const particles = [];
+    const maxParticles = 150;
+
+    // Particle object
+    class Particle {
+      constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        this.size = Math.random() * 3 + 1;
+        this.speedX = Math.random() * 2 - 1;
+        this.speedY = Math.random() * 2 - 1;
+        this.opacity = 1;
+      }
+
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        this.opacity -= 0.02; // Fade out
+      }
+
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = \`rgba(255, 255, 255, \${this.opacity})\`; // White with fading effect
+        ctx.fill();
+      }
+    }
+
+    // Track mouse position
+    const mouse = { x: undefined, y: undefined };
+
+    window.addEventListener('mousemove', (event) => {
+      mouse.x = event.x;
+      mouse.y = event.y;
+
+      // Create particles at the mouse position
+      for (let i = 0; i < 5; i++) {
+        particles.push(new Particle(mouse.x, mouse.y));
+      }
+
+      // Limit the number of particles
+      if (particles.length > maxParticles) {
+        particles.splice(0, particles.length - maxParticles);
+      }
+    });
+
+    // Animation loop
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Draw and update particles
+      particles.forEach((particle, index) => {
+        if (particle.opacity <= 0) {
+          particles.splice(index, 1); // Remove faded particles
+        } else {
+          particle.update();
+          particle.draw();
+        }
+      });
+
+      requestAnimationFrame(animate);
+    }
+
+    // Handle window resizing
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+
+    animate();
+  </script>
+</body>
+</html>
