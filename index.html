@@ -40,4 +40,27 @@
       rotateY(rotateY);
 
       // Draw the first line of text
-      fill(0, 
+      fill(0, 191, 255); // Sky blue color
+      textSize(48);
+      text('Move to', 0, -50);
+
+      // Draw the second line of text
+      fill(255, 215, 0); // Gold color
+      textSize(60);
+      text('S/4HANA Public Cloud', 0, 50);
+    }
+
+    function mouseDragged() {
+      // Update the target rotation based on mouse drag
+      let sensitivity = 0.01;
+      targetRotateY += (mouseX - prevMouseX) * sensitivity;
+
+      prevMouseX = mouseX;
+    }
+
+    function mousePressed() {
+      prevMouseX = mouseX;
+    }
+  </script>
+</body>
+</html>
