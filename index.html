@@ -1,60 +1,47 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>3D Text Rotation</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
-</head>
-<body>
-  <script>
-    let font;
-    let rotateY = 0;
-    let targetRotateY = 0;
-    let prevMouseX;
+let font;
+let rotateY = 0;
+let targetRotateY = 0;
+let prevMouseX;
 
-    function preload() {
-      font = loadFont('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/webfonts/fa-solid-900.ttf'); // Load a font
-    }
+function preload() {
+  font = loadFont('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/webfonts/fa-solid-900.ttf'); // Load a font
+}
 
-    function setup() {
-      createCanvas(800, 800, WEBGL); // 3D canvas
-      textFont(font);
-      textAlign(CENTER, CENTER);
-    }
+function setup() {
+  createCanvas(800, 800, WEBGL); // 3D canvas
+  textFont(font);
+  textAlign(CENTER, CENTER);
+}
 
-    function draw() {
-      background(0); // Black background
-      lights(); // Add basic lighting for 3D rendering
+function draw() {
+  background(0); // Black background
+  lights(); // Add basic lighting for 3D rendering
 
-      // Smooth transition for rotation
-      rotateY = lerp(rotateY, targetRotateY, 0.1); // Gradual transition to target rotation
+  // Smooth transition for rotation
+  rotateY = lerp(rotateY, targetRotateY, 0.1); // Gradual transition to target rotation
 
-      // Apply rotation
-      rotateY(rotateY);
+  // Apply rotation
+  rotateY(rotateY);
 
-      // Draw the first line of text
-      fill(0, 191, 255); // Sky blue color
-      textSize(48);
-      text('Move to', 0, -50);
+  // Draw the first line of text
+  fill(0, 191, 255); // Sky blue color
+  textSize(48);
+  text("Move to", 0, -50);
 
-      // Draw the second line of text
-      fill(255, 215, 0); // Gold color
-      textSize(60);
-      text('S/4HANA Public Cloud', 0, 50);
-    }
+  // Draw the second line of text
+  fill(255, 215, 0); // Gold color
+  textSize(60);
+  text("S/4HANA Public Cloud", 0, 50);
+}
 
-    function mouseDragged() {
-      // Update the target rotation based on mouse drag
-      let sensitivity = 0.01;
-      targetRotateY += (mouseX - prevMouseX) * sensitivity;
+function mouseDragged() {
+  // Update the target rotation based on mouse drag
+  let sensitivity = 0.01;
+  targetRotateY += (mouseX - prevMouseX) * sensitivity;
 
-      prevMouseX = mouseX;
-    }
+  prevMouseX = mouseX;
+}
 
-    function mousePressed() {
-      prevMouseX = mouseX;
-    }
-  </script>
-</body>
-</html>
+function mousePressed() {
+  prevMouseX = mouseX;
+}
