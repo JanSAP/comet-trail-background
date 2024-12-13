@@ -1,66 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>3D Text Rotation</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
-  <style>
-    body {
-      margin: 0;
-      overflow: hidden;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Text Rotation</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            perspective: 1200px; /* This creates the 3D space */
+            cursor: grab;
+        }
+
+        .text {
+            display: inline-block;
+            font-size: 50px;
+            font-weight: bold;
+            color: #333;
+            transform-style: preserve-3d;
+            transition: transform 0.3s ease;
+            will-change: transform;
+        }
+
+        .text span {
+            display: block;
+            transform: rotateY(180deg);
+        }
+
+        .container:active {
+            cursor: grabbing;
+        }
+    </style>
 </head>
 <body>
-  <script>
-    let font;
-    let rotateY = 0;
-    let targetRotateY = 0;
-    let prevMouseX;
+    <div class="container" id="container">
+        <div class="text" id="text">
+            <span>Grow with SAP</span>
+        </div>
+    </div>
 
-    function preload() {
-      font = loadFont('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/webfonts/fa-solid-900.ttf'); // Load a font
-    }
+    <script>
+        let container = document.getElementById('container');
+        let text = document.getElementById('text');
+        let isMouseDown = false;
+        let startX;
+        let currentRotation = 0;
 
-    function setup() {
-      createCanvas(800, 800, WEBGL); // 3D canvas
-      textFont(font);
-      textAlign(CENTER, CENTER);
-    }
+        container.addEventListener('mousedown', (e) => {
+            isMouseDown = true;
+            startX = e.clientX;
+            container.style.cursor = 'grabbing';
+        });
 
-    function draw() {
-      background(0); // Black background
-      lights(); // Add basic lighting for 3D rendering
+        window.addEventListener('mousemove', (e) => {
+            if (!isMouseDown) return;
+            let diffX = e.clientX - startX;
+            currentRotation += diffX * 0.5; // Adjust speed of rotation
+            text.style.transform = `rotateY(${currentRotation}deg)`;
+            startX = e.clientX;
+        });
 
-      // Smooth transition for rotation
-      rotateY = lerp(rotateY, targetRotateY, 0.1); // Gradual transition to target rotation
-
-      // Apply rotation
-      rotateY(rotateY);
-
-      // Draw the first line of text
-      fill(0, 191, 255); // Sky blue color
-      textSize(48);
-      text('Move to', 0, -50);
-
-      // Draw the second line of text
-      fill(255, 215, 0); // Gold color
-      textSize(60);
-      text('S/4HANA Public Cloud', 0, 50);
-    }
-
-    function mouseDragged() {
-      // Update the target rotation based on mouse drag
-      let sensitivity = 0.01;
-      targetRotateY += (mouseX - prevMouseX) * sensitivity;
-
-      prevMouseX = mouseX;
-    }
-
-    function mousePressed() {
-      prevMouseX = mouseX;
-    }
-  </script>
+        window.addEventListener('mouseup', () => {
+            isMouseDown = false;
+            container.style.cursor = 'grab';
+        });
+    </script>
 </body>
 </html>
